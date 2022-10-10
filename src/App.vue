@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { IFixture } from './types'
+import { ref } from 'vue';
 import { useStore } from './store'
 
 const store = useStore()
-
 store.fetchFixtures()
 
-// const fixtures = ref<IFixture[] | null>()
-const fixtures = ref(store.orderedFixtures)
-const fixturesByDate = computed(() => {
-  // return fixtures.value ? fixtures.value.sort((a, b) => a.date.getTime() - b.date.getTime()) : []
-  return fixtures.value ? fixtures.value.sort((a, b) => a.date.getTime() - b.date.getTime()) : []
-})
+const loading = ref<boolean>(false)
+const fixtures = store.orderedFixtures
+
+loading.value = fixtures.length === 0
 
 </script>
 
 <template>
   <h1>Fixtures:</h1>
-  <p v-for="fixture in fixtures" :key="fixture.id">{{fixture.homeTeam}} v {{fixture.awayTeam}}</p>
+  <p v-if="loading">Loading...</p>
+  <p v-for="fixture in store.orderedFixtures" :key="fixture.fixture.id">
+    <span>{{fixture.teams.home.name}}</span>
+    <span>v</span> 
+    <span>{{fixture.teams.away.name}}</span>
+  </p>
 </template>

@@ -19,9 +19,8 @@ export const useStore = defineStore('main', {
     orderedFixtures(): IFixture[] {
       if (this.fixtures.length === 0)
         return []
-      console.log('trying the ordering')
       try {
-        let ordered = this.fixtures.sort((a, b) => a.date.getTime() - b.date.getTime())
+        let ordered = this.fixtures.sort((a, b) => new Date(a.fixture.date).getTime() - new Date(b.fixture.date).getTime())
         return ordered
       } catch (error) {
         console.error(error)
@@ -31,7 +30,6 @@ export const useStore = defineStore('main', {
   },
   actions: {
     async fetchFixtures() {
-      console.log('pre-fetch:', this.fixtures)
       const params: Options = {
         query: {
           league: '39',
@@ -42,7 +40,6 @@ export const useStore = defineStore('main', {
       try {
         const apiFixtures: any = await api.get('/fixtures', params).then((response) => { return response })
         this.fixtures = apiFixtures.response
-        console.log('post-fetch:', this.fixtures)
       } 
       catch (error) {
         console.error(error)
