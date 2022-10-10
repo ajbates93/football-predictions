@@ -13,7 +13,8 @@ const api = mande('https://api-football-v1.p.rapidapi.com/v3', globalOptions)
 
 export const useStore = defineStore('main', {
   state: () => ({
-    fixtures: [] as IFixture[]
+    fixtures: [] as IFixture[],
+    loading: false
   }),
   getters: {
     orderedFixtures(): IFixture[] {
@@ -38,12 +39,17 @@ export const useStore = defineStore('main', {
         }
       }
       try {
+        this.loading = true
         const apiFixtures: any = await api.get('/fixtures', params).then((response) => { return response })
         this.fixtures = apiFixtures.response
+        this.loading = false
       } 
       catch (error) {
         console.error(error)
         return error
+      }
+      finally {
+        this.loading = false
       }
     }
   }
