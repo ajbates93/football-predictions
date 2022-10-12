@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useStorage } from '@vueuse/core'
 import { IFixture } from '../types'
 import { mande, Options, OptionsRaw } from 'mande'
 
@@ -40,9 +41,18 @@ export const useStore = defineStore('main', {
       }
       try {
         this.loading = true
-        const apiFixtures: any = await api.get('/fixtures', params).then((response) => { return response })
-        this.fixtures = apiFixtures.response
-        this.loading = false
+        const currentRound = "Regular Season - 10"
+        const fixtureDate = new Date().toLocaleDateString()
+        const existing = JSON.parse(localStorage.getItem('fixtures') || "")
+        if (!existing 
+          // Consider whether to re-fetch fixtures each day, or after each round.
+          // || existing.fixtures[0].league.round !== currentRound
+          || existing.date !== fixtureDate
+        ) {
+          const apiFixtures: any = await api.get('/fixtures', params).then((response) => { return response })
+          this.fixtures = apiFixtures.response
+          useStorage('fixtures', JSON.stringify({ fixtures: apiFixtures.response, date: fixtureDate }))
+        }
       } 
       catch (error) {
         console.error(error)
