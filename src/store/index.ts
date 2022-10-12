@@ -52,6 +52,8 @@ export const useStore = defineStore('main', {
           const apiFixtures: any = await api.get('/fixtures', params).then((response) => { return response })
           this.fixtures = apiFixtures.response
           useStorage('fixtures', JSON.stringify({ fixtures: apiFixtures.response, date: fixtureDate }))
+        } else {
+          this.fixtures = existing.fixtures
         }
       } 
       catch (error) {
