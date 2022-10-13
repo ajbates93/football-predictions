@@ -1,27 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useStore } from '../store'
 import { IFixture } from '../types';
 
 const store = useStore()
-const { fixture, date, showPrediction } = defineProps<{
-  fixture: IFixture,
-  key: number,
-  date: Date,
-  showPrediction: boolean
+const props = defineProps<{
+  fixture: IFixture
+  showPrediction: boolean,
+  savePrediction: boolean
 }>()
 
 const homePrediction = ref(0)
 const awayPrediction = ref(0)
 
-const savePrediction = () => {
-  
-}
+watch(() =>  props.savePrediction, () => {
+  if (props.savePrediction)
+    store.savePrediction({
+      id: 0,
+      fixtureId: props.fixture.fixture.id,
+      homeGoals: homePrediction.value,
+      awayGoals: awayPrediction.value,
+      xG: 0
+    })
+})
 
 const showDate = ref<boolean>(false)
-const first = store.orderedFixtures.find(x => new Date(x.fixture.date).toLocaleDateString() === new Date(fixture.fixture.date).toLocaleDateString())
+const first = store.orderedFixtures.find(x => new Date(x.fixture.date).toLocaleDateString() === new Date(props.fixture.fixture.date).toLocaleDateString())
 if (first)
-  showDate.value = first.fixture.id === fixture.fixture.id
+  showDate.value = first.fixture.id === props.fixture.fixture.id
   
 </script>
 

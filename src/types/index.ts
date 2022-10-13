@@ -38,3 +38,21 @@ export interface IFixture {
     }
   }
 }
+
+export interface IPredictedFixture {
+  id: number,
+  fixtureId: number,
+  predictionId: number,
+  homeTeam: string,
+  homeGoals: number,
+  awayTeam: string,
+  awayGoals: number
+}
+
+export interface IPrediction {
+  id: number,
+  fixtureId: number,
+  homeGoals: number,
+  awayGoals: number,
+  xG: number
+}
