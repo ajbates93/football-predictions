@@ -95,7 +95,11 @@ export const useStore = defineStore('main', {
       }
     },
     savePrediction(prediction: IPrediction) {
-      this.predictions.push(prediction)
+      const pIdx = this.predictions.findIndex(x => x.fixtureId === prediction.fixtureId)
+      if (pIdx === -1)
+        this.predictions.push(prediction)
+      else 
+        this.predictions[pIdx] = prediction
     }
   }
 })

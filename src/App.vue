@@ -6,8 +6,17 @@ import Fixture from './components/Fixture.vue'
 const store = useStore()
 store.fetchFixtures()
 
-const activePredictions = ref(false)
+const editPredictions = ref(false)
 const savePredictions = ref(false)
+
+const edit = () => {
+  savePredictions.value = false
+  editPredictions.value = true
+}
+const save = () => {
+  savePredictions.value = true
+  editPredictions.value = false
+}
 
 </script>
 
@@ -16,19 +25,13 @@ const savePredictions = ref(false)
   <p v-if="store.loading">Loading...</p>
   <Fixture v-for="fixture in store.orderedFixtures" 
     :fixture="fixture"
-    :showPrediction="activePredictions" 
+    :editPrediction="editPredictions" 
     :savePrediction="savePredictions"
     :key="fixture.fixture.id" />
-  <div my5>
-    <button @click="activePredictions = !activePredictions" 
-      bg-green-600 text-white rounded-sm px3 py1>{{activePredictions ? 'Hide' : 'Show'}} Predictions!</button>
-    <button v-if="activePredictions" @click="savePredictions = true" 
-      bg-green-600 text-white rounded-sm px3 py1>Save Predictions!</button>
-  </div>
-  <div v-if="store.predictions.length">
-    <h3 text-3xl font-bold mb5>Current Predictions</h3>
-    <div v-for="prediction in store.predictions" :key="prediction.id">
-      {{ prediction }}
-    </div>
+  <div my5 flex justify-center>
+    <button @click="edit" 
+      bg-green-600 text-white rounded-sm px3 py1 mx-2>{{editPredictions ? 'Cancel' : 'Make'}} Predictions!</button>
+    <button v-if="editPredictions" @click="save" 
+      bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
   </div>
 </template>
