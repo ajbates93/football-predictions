@@ -3,8 +3,5 @@
 </script>
 
 <template>
-  <Header />
-  <main>
-    <router-view />
-  </main>
+  <h1 text-5xl font-bold mb5>Settings</h1>
 </template>
