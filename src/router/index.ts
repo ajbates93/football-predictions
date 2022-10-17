@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import useAuthUser from '../composables/useAuthUser'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,7 +15,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/account',
     name: 'account',
-    component: () => import('../pages/Account.vue')
+    component: () => import('../pages/Account.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/settings',
@@ -33,7 +37,15 @@ const routes: Array<RouteRecordRaw> = [
   }
 ]
 
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.beforeEach((to) => {
+  const { isLoggedIn } = useAuthUser()
+  if (!isLoggedIn() && to.meta.requiresAuth)
+    return { name: "home" }
+})
+
+export { router }

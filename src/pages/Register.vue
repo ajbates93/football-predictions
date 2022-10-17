@@ -8,11 +8,9 @@ const { register } = useAuthUser()
 const form = ref({
   email: "",
   password: "",
-  options: {
-    data: {
-      firstName: "",
-      lastName: ""
-    }
+  meta: {
+    firstName: "",
+    lastName: ""
   }
 })
 
@@ -33,10 +31,10 @@ const handleSubmit = async () => {
   <form max-w-lg m-auto @submit.prevent="handleSubmit">
     <h1 class="text-5xl mb-10">Register</h1>
     <p my2 mx2 text-lg>
-      <label>First Name: <input px2 py1 rounded v-model="form.options.data.firstName" type="text" /></label>
+      <label>First Name: <input px2 py1 rounded v-model="form.meta.firstName" type="text" /></label>
     </p>
     <p my2 mx2 text-lg>
-      <label>Last Name: <input px2 py1 rounded v-model="form.options.data.lastName" type="text" /></label>
+      <label>Last Name: <input px2 py1 rounded v-model="form.meta.lastName" type="text" /></label>
     </p>
     <p my2 mx2 text-lg>
       <label>Email: <input px2 py1 rounded v-model="form.email" type="email" /></label>
