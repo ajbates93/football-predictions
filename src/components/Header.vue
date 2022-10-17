@@ -1,5 +1,5 @@
 <template>
-  <header fixed top-0 left-0 w-full bg-gray-800 p3>
+  <header fixed top-0 left-0 w-full bg-green-600 p3>
     <nav flex justify-between items-center>
       <div>
         <router-link font-bold text-xl hover:text-green-500 flex items-center to="/"><span inline-block text-white mr3 text-2xl i-iconoir-soccer-ball></span>Pred.io</router-link>
