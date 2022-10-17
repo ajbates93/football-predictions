@@ -20,6 +20,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/settings',
     name: 'settings',
     component: () => import('../pages/Settings.vue')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../pages/Register.vue')
+  },
+  { 
+    path: '/email-confirmation',
+    name: 'EmailConfirmation',
+    component: () => import('../pages/EmailConfirmation.vue')
   }
 ]
 

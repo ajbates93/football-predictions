@@ -16,7 +16,8 @@ export const useStore = defineStore('main', {
   state: () => ({
     fixtures: [] as IFixture[],
     predictions: [] as IPrediction[],
-    loading: false
+    loading: false,
+    showLogIn: false
   }),
   getters: {
     orderedFixtures(): IFixture[] {
@@ -100,6 +101,9 @@ export const useStore = defineStore('main', {
         this.predictions.push(prediction)
       else 
         this.predictions[pIdx] = prediction
+    },
+    toggleShowLogIn(show: boolean) {
+      this.showLogIn = show
     }
   }
 })

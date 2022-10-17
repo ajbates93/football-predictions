@@ -1,5 +1,6 @@
 <script setup lang="ts">
-
+import { userLoggedIn } from '../auth'
+// const { data, error } = userLoggedIn()
 </script>
 
 <template>

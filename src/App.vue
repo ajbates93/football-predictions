@@ -4,6 +4,7 @@
 
 <template>
   <Header />
+  <Login />
   <main>
     <router-view />
   </main>
