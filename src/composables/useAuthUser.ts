@@ -3,12 +3,6 @@ import useSupabase from './useSupabase'
 import { SignInWithPasswordCredentials, Session } from '@supabase/supabase-js'
 const user = ref<Session["user"] | null>(null)
 
-interface RegisterProps {
-  email: string,
-  password: string,
-  meta: any
-}
-
 export default function useAuthUser() {
   const { supabase } = useSupabase()
   

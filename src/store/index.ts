@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { IFixture, IPredictedFixture, IPrediction } from '../types'
 import { mande, Options, OptionsRaw } from 'mande'
+import usePrediction from '../composables/usePrediction'
 
 const globalOptions: OptionsRaw = {
   headers: {
@@ -67,14 +68,16 @@ export const useStore = defineStore('main', {
         query: {
           league: '39',
           season: '2022',
-          round: 'Regular Season - 10'
+          round: 'Regular Season - 11'
         }
       }
       try {
         this.loading = true
-        const currentRound = "Regular Season - 10"
+        const currentRound = "Regular Season - 11"
         const fixtureDate = new Date().toLocaleDateString()
-        const existing = JSON.parse(localStorage.getItem('fixtures') || "")
+        
+        const lStorage = localStorage.getItem('fixtures')
+        const existing = lStorage ? JSON.parse(lStorage) : ''
         if (!existing 
           // Consider whether to re-fetch fixtures each day, or after each round.
           // || existing.fixtures[0].league.round !== currentRound
@@ -97,10 +100,15 @@ export const useStore = defineStore('main', {
     },
     savePrediction(prediction: IPrediction) {
       const pIdx = this.predictions.findIndex(x => x.fixtureId === prediction.fixtureId)
-      if (pIdx === -1)
+      if (pIdx === -1) 
         this.predictions.push(prediction)
       else 
         this.predictions[pIdx] = prediction
+    },
+    insertPredictions() {
+      const { addAllPredictions } = usePrediction()
+      if (this.predictions.length > 0)
+        addAllPredictions(this.predictions)
     },
     toggleShowLogIn(show: boolean) {
       this.showLogIn = show

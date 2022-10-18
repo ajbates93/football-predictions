@@ -16,6 +16,9 @@ const save = () => {
   savePredictions.value = true
   editPredictions.value = false
 }
+const submit = () => {
+  store.insertPredictions()
+}
 
 </script>
 
@@ -32,5 +35,9 @@ const save = () => {
       bg-green-600 text-white rounded-sm px3 py1 mx-2>{{editPredictions ? 'Cancel' : 'Make'}} Predictions!</button>
     <button v-if="editPredictions" @click="save" 
       bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
+  </div>
+  <div my5>
+    <button v-if="!editPredictions && savePredictions" @click="submit" 
+      bg-red-600 text-white rounded-sm px3 py1 mx-2>Submit Predictions!</button>
   </div>
 </template>
