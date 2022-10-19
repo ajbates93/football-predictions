@@ -5,7 +5,7 @@
 <template>
   <Header />
   <Login />
-  <main pt20>
+  <main max-w-5xl mx-auto py10>
     <router-view />
   </main>
 </template>

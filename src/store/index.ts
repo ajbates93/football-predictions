@@ -3,6 +3,7 @@ import { useStorage } from '@vueuse/core'
 import { IFixture, IPredictedFixture, IPrediction } from '../types'
 import { mande, Options, OptionsRaw } from 'mande'
 import usePrediction from '../composables/usePrediction'
+import useProfile from '../composables/useProfile'
 
 const globalOptions: OptionsRaw = {
   headers: {
@@ -18,7 +19,8 @@ export const useStore = defineStore('main', {
     fixtures: [] as IFixture[],
     predictions: [] as IPrediction[],
     loading: false,
-    showLogIn: false
+    showLogIn: false,
+    userProfile: {}
   }),
   getters: {
     orderedFixtures(): IFixture[] {
@@ -118,6 +120,10 @@ export const useStore = defineStore('main', {
       const { addAllPredictions } = usePrediction()
       if (this.predictions.length > 0)
         addAllPredictions(this.predictions)
+    },
+    fetchUserProfile() {
+      const { fetchProfile } = useProfile()
+      this.userProfile = fetchProfile()
     },
     toggleShowLogIn(show: boolean) {
       this.showLogIn = show
