@@ -27,7 +27,7 @@ const submit = () => {
 </script>
 
 <template>
-  <h1 text-5xl font-bold mb5>Fixtures</h1>
+  <h1 text-5xl font-bold mb5 text-center>Fixtures</h1>
   <p v-if="store.loading">Loading...</p>
   <Fixture v-for="fixture in store.orderedFixtures" 
     :fixture="fixture"

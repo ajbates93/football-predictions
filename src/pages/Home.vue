@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <section text-center mx-auto id="homepage">
+  <section flex items-center justify-center flex-col min-h-150 text-center mx-auto id="homepage">
     <h1 text-5xl font-bold mb10>Welcome to Pred.io!</h1>
     <h3 text-2xl my5>Predict multiple fixtures each gameweek. Join a league with your friends and compete to be top of the table!</h3>
     <h3 text-2xl mt5>Get started by registering for an account below.</h3>

@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import useAuthUser from '../composables/useAuthUser'
 import { useStore } from '../store'
 const { user, isLoggedIn } = useAuthUser()
 const store = useStore()
 
-if (!store.userProfile)
-  store.fetchUserProfile()
+onMounted(() => {
+  if (!store.$state.userProfile)
+    store.fetchUserProfile()
+})
 
 </script>
 

@@ -47,7 +47,7 @@ if (first)
 </script>
 
 <template>
-  <p mt5 mb1 text-xl v-if="showDate">{{new Date(fixture.fixture.date).toLocaleDateString()}}</p>
+  <p text-center font-bold mt5 mb2 text-2xl v-if="showDate">{{new Date(fixture.fixture.date).toLocaleDateString()}}</p>
   <div mb1 grid style="grid-template-columns: 3fr 1fr 3fr">
     <span px1 text-right inline-block>{{fixture.teams.home.name}}</span>
     <span grid-col-a text-center px1 inline-block>v</span> 
