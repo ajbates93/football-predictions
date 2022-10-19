@@ -7,17 +7,21 @@ store.fetchFixtures()
 
 const editPredictions = ref(false)
 const savePredictions = ref(false)
+const loading = ref(false)
 
 const edit = () => {
   savePredictions.value = false
   editPredictions.value = true
+  store.fetchPredictions()
 }
 const save = () => {
   savePredictions.value = true
   editPredictions.value = false
 }
 const submit = () => {
+  loading.value = true
   store.insertPredictions()
+  loading.value = false
 }
 
 </script>
@@ -38,6 +42,6 @@ const submit = () => {
   </div>
   <div my5>
     <button v-if="!editPredictions && savePredictions" @click="submit" 
-      bg-red-600 text-white rounded-sm px3 py1 mx-2>Submit Predictions!</button>
+      bg-red-600 text-white rounded-sm px3 py1 mx-2>{{ loading ? 'Submitting...' : 'Submit Predictions!'}}</button>
   </div>
 </template>

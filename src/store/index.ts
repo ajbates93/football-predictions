@@ -74,7 +74,7 @@ export const useStore = defineStore('main', {
       try {
         this.loading = true
         const currentRound = "Regular Season - 11"
-        const fixtureDate = new Date().toLocaleDateString()
+        const fixtureDate = '18/10/2022' // new Date().toLocaleDateString()
         
         const lStorage = localStorage.getItem('fixtures')
         const existing = lStorage ? JSON.parse(lStorage) : ''
@@ -88,6 +88,7 @@ export const useStore = defineStore('main', {
           useStorage('fixtures', JSON.stringify({ fixtures: apiFixtures.response, date: fixtureDate }))
         } else {
           this.fixtures = existing.fixtures
+          this.fetchPredictions()
         }
       } 
       catch (error) {
@@ -97,6 +98,14 @@ export const useStore = defineStore('main', {
       finally {
         this.loading = false
       }
+    },
+    fetchPredictions() {
+      const { fetchPredictions } = usePrediction()
+      fetchPredictions(this.fixtures)
+        .then((res: IPrediction[] | undefined) => {
+          if (res)
+            this.predictions = res
+        })
     },
     savePrediction(prediction: IPrediction) {
       const pIdx = this.predictions.findIndex(x => x.fixtureId === prediction.fixtureId)

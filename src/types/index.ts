@@ -50,7 +50,7 @@ export interface IPredictedFixture {
 }
 
 export interface IPrediction {
-  id: number,
+  id?: number | null,
   fixtureId: number,
   homeGoals: number,
   awayGoals: number,

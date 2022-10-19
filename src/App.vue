@@ -5,7 +5,7 @@
 <template>
   <Header />
   <Login />
-  <main>
+  <main pt20>
     <router-view />
   </main>
 </template>

@@ -20,7 +20,6 @@ let completePrediction = ref<IPredictedFixture>()
 watch(() =>  props.savePrediction, () => {
   if (props.savePrediction)
     store.savePrediction({
-      id: 0,
       fixtureId: props.fixture.fixture.id,
       homeGoals: parseInt(homePrediction.value.toString()),
       awayGoals: parseInt(awayPrediction.value.toString()),
