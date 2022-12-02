@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useStore } from '../store'
+import ComponentWrapper from '../components/ComponentWrapper.vue'
 
 const store = useStore()
 store.fetchFixtures()
@@ -32,23 +33,27 @@ const submit = () => {
 </script>
 
 <template>
-  <h1 text-5xl font-bold mb5 text-center>Fixtures</h1>
-  <p v-if="store.loading">Loading...</p>
-  <Fixture v-for="fixture in store.orderedFixtures" 
-    :fixture="fixture"
-    :editPrediction="editPredictions" 
-    :savePrediction="savePredictions"
-    :key="fixture.fixture.id" />
-  <div my5 flex justify-center>
-    <button @click="cancel" v-if="editPredictions"
-      bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
-    <button @click="edit"  v-if="!editPredictions"
-      bg-green-600 text-white rounded-sm px3 py1 mx-2>Make Predictions!</button>
-    <button v-if="editPredictions" @click="save" 
-      bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
-  </div>
-  <div my5 flex justify-center>
-    <button v-if="!editPredictions && savePredictions" @click="submit" 
-      bg-red-600 text-white rounded-sm px3 py1 mx-2>{{ loading ? 'Submitting...' : 'Submit Predictions!'}}</button>
-  </div>
+  <section text-center mx-auto class="bg-[#242424]" py-20>
+    <ComponentWrapper>
+      <h1 text-5xl font-bold mb10 text-center>Fixtures</h1>
+      <p v-if="store.loading">Loading...</p>
+      <Fixture v-for="fixture in store.orderedFixtures" 
+        :fixture="fixture"
+        :editPrediction="editPredictions" 
+        :savePrediction="savePredictions"
+        :key="fixture.fixture.id" />
+      <div my5 flex justify-center>
+        <button @click="cancel" v-if="editPredictions"
+          bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
+        <button @click="edit"  v-if="!editPredictions"
+          bg-green-600 text-white rounded-sm px3 py1 mx-2>Make Predictions!</button>
+        <button v-if="editPredictions" @click="save" 
+          bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
+      </div>
+      <div my5 flex justify-center>
+        <button v-if="!editPredictions && savePredictions" @click="submit" 
+          bg-red-600 text-white rounded-sm px3 py1 mx-2>{{ loading ? 'Submitting...' : 'Submit Predictions!'}}</button>
+      </div>
+    </ComponentWrapper>
+  </section>
 </template>

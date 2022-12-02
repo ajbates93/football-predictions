@@ -5,7 +5,8 @@
 <template>
   <Header />
   <Login />
-  <div bg-white dark:bg-gray-900 min-h-screen>
+  <div bg-white class="dark:bg-[#242424]" min-h-screen>
     <router-view />
   </div>
+  <footer>Footer</footer>
 </template>

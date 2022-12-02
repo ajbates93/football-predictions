@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useStore } from '../store'
 import useAuthUser from '../composables/useAuthUser'
-import { computed, onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+import { useDark, useToggle } from '@vueuse/core'
 const store = useStore()
 const logIn = () => store.toggleShowLogIn(true)
 const { user, isLoggedIn } = useAuthUser()
@@ -10,6 +11,9 @@ const stickyHeader = ref(false)
 const handleScroll = () => {
   window.pageYOffset ? stickyHeader.value = true : stickyHeader.value = false
 }
+
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 
 onBeforeMount(() => window.addEventListener('scroll', handleScroll))
 
@@ -28,6 +32,7 @@ onBeforeMount(() => window.addEventListener('scroll', handleScroll))
         <span v-if="isLoggedIn()">|</span>
         <router-link v-if="isLoggedIn()" text-3xl hover:text-green-500 ml3 i-carbon-user-avatar-filled text-white inline-block to="/account"></router-link>
         <router-link v-if="isLoggedIn()" text-3xl hover:text-green-500 mx3 i-carbon-settings text-white inline-block to="/settings"></router-link>
+        <button @click="toggleDark()" dark:i-carbon-sun i-carbon-moon dark:text-yellow-300 text-white text-3xl></button>
       </div>
     </nav>
   </header>

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useStore } from '../store'
+import useAuthUser from '../composables/useAuthUser'
+
 const store = useStore()
+const { isLoggedIn } = useAuthUser()
 
 const logIn = () => store.toggleShowLogIn(true)
 </script>
@@ -13,9 +16,20 @@ const logIn = () => store.toggleShowLogIn(true)
       <h3 text-2xl my5>Predict multiple fixtures each gameweek. Join a league with your friends and compete to be top of the table!</h3>
       <h3 text-2xl my5>Get started by registering for an account below.</h3>
       <div flex justify-center items-center gap-5>
-        <router-link as="button" to="/register" inline-block my5 text-xl bg-green-600 text-white rounded px3 py2>Register</router-link>
-        <button as="button" @click="logIn" inline-block my5 text-xl bg-blue-600 text-white rounded px3 py2>Log In</button>
+        <template v-if="isLoggedIn()">
+          <router-link as="button" to="/predictions" inline-block my5 text-xl bg-green-600 text-white rounded px3 py2>Fixtures &amp; Predictions</router-link>
+          <router-link as="button" to="/account" inline-block my5 text-xl bg-green-600 text-white rounded px3 py2>Account</router-link>
+        </template>
+        <template v-else>
+          <router-link as="button" to="/register" inline-block my5 text-xl bg-green-600 text-white rounded px3 py2>Register</router-link>
+          <button as="button" @click="logIn" inline-block my5 text-xl bg-blue-600 text-white rounded px3 py2>Log In</button>
+        </template>
       </div>
+    </div>
+  </section>
+  <section py-5 bg-white class="dark:bg-[#242424]" text-green-600 dark:text-white text-center text-xl>
+    <div>
+      <p>Some other stuff...</p>
     </div>
   </section>
 </template>
