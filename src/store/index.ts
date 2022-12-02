@@ -70,13 +70,12 @@ export const useStore = defineStore('main', {
         query: {
           league: '39',
           season: '2022',
-          round: 'Regular Season - 11'
+          round: 'Regular Season - 14'
         }
       }
       try {
         this.loading = true
-        const currentRound = "Regular Season - 11"
-        const fixtureDate = '18/10/2022' // new Date().toLocaleDateString()
+        const fixtureDate = '26/10/2022' // new Date().toLocaleDateString()
         
         const lStorage = localStorage.getItem('fixtures')
         const existing = lStorage ? JSON.parse(lStorage) : ''
