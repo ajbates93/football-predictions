@@ -5,7 +5,7 @@
 <template>
   <Header />
   <Login />
-  <main max-w-5xl mx-auto py10>
+  <div bg-white dark:bg-gray-900 min-h-screen>
     <router-view />
-  </main>
+  </div>
 </template>
