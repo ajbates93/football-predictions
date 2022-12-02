@@ -18,13 +18,17 @@ const hasCompletePrediction = ref(false)
 let completePrediction = ref<IPredictedFixture>()
 
 watch(() =>  props.savePrediction, () => {
-  if (props.savePrediction)
+  if (props.savePrediction) {
+    const pId = store.predictions.find(x => x.fixtureId === props.fixture.fixture.id)?.id
     store.savePrediction({
+      id: pId,
       fixtureId: props.fixture.fixture.id,
       homeGoals: parseInt(homePrediction.value.toString()),
       awayGoals: parseInt(awayPrediction.value.toString()),
       xG: 0
     })
+  }
+  
 })
 
 watch(() => store.orderedFixturesWithPredictions, (value, oldValue) => {
@@ -47,22 +51,22 @@ if (first)
 </script>
 
 <template>
-  <p text-center font-bold mt5 mb2 text-2xl v-if="showDate">{{new Date(fixture.fixture.date).toLocaleDateString()}}</p>
-  <div mb1 grid style="grid-template-columns: 3fr 1fr 3fr">
+  <p text-center font-bold mt5 mb2 text-2xl underline v-if="showDate">{{new Date(fixture.fixture.date).toLocaleDateString()}}</p>
+  <div mb1 grid style="grid-template-columns: 3fr 25px 3fr">
     <span px1 text-right inline-block>{{fixture.teams.home.name}}</span>
-    <span grid-col-a text-center px1 inline-block>v</span> 
+    <span mx-auto text-center px1 inline-block text-green-500>v</span> 
     <span px1 text-left inline-block>{{fixture.teams.away.name}}</span>
   </div>
   <div v-if="editPrediction"
-    grid mb2 style="grid-template-columns: 3fr 1fr 3fr">
+    grid mb2 style="grid-template-columns: 3fr 25px 3fr">
     <input inputmode="numeric" rounded-sm justify-self-end mx1 inline-block w-10 text-center v-model="homePrediction" />
-    <span text-center px1 inline-block></span>
+    <span text-center px1 inline-block text-gray-400>-</span>
     <input inputmode="numeric" rounded-sm justify-self-start mx1 inline-block w-10 text-center v-model="awayPrediction" />
   </div>
   <div v-if="completePrediction && !editPrediction"
-    grid mb2 style="grid-template-columns: 3fr 1fr 3fr">
-    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center>{{completePrediction.homeGoals}}</span>
-    <span text-center px1 inline-block></span>
-    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center>{{completePrediction.awayGoals}}</span>
+    grid mb2 style="grid-template-columns: 3fr 25px 3fr">
+    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-green-700>{{completePrediction.homeGoals}}</span>
+    <span text-center px1 inline-block text-gray-400>-</span>
+    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-green-700>{{completePrediction.awayGoals}}</span>
   </div>
 </template>

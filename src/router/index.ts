@@ -10,7 +10,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/predictions',
     name: 'predictions',
-    component: () => import('../pages/Predictions.vue')
+    component: () => import('../pages/Predictions.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/account',
@@ -23,7 +26,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/settings',
     name: 'settings',
-    component: () => import('../pages/Settings.vue')
+    component: () => import('../pages/Settings.vue'),
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/register',

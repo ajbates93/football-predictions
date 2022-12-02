@@ -9,6 +9,10 @@ const editPredictions = ref(false)
 const savePredictions = ref(false)
 const loading = ref(false)
 
+const cancel = () => {
+  savePredictions.value = false
+  editPredictions.value = false
+}
 const edit = () => {
   savePredictions.value = false
   editPredictions.value = true
@@ -21,6 +25,7 @@ const save = () => {
 const submit = () => {
   loading.value = true
   store.insertPredictions()
+  savePredictions.value = false
   loading.value = false
 }
 
@@ -35,12 +40,14 @@ const submit = () => {
     :savePrediction="savePredictions"
     :key="fixture.fixture.id" />
   <div my5 flex justify-center>
-    <button @click="edit" 
-      bg-green-600 text-white rounded-sm px3 py1 mx-2>{{editPredictions ? 'Cancel' : 'Make'}} Predictions!</button>
+    <button @click="cancel" v-if="editPredictions"
+      bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
+    <button @click="edit"  v-if="!editPredictions"
+      bg-green-600 text-white rounded-sm px3 py1 mx-2>Make Predictions!</button>
     <button v-if="editPredictions" @click="save" 
       bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
   </div>
-  <div my5>
+  <div my5 flex justify-center>
     <button v-if="!editPredictions && savePredictions" @click="submit" 
       bg-red-600 text-white rounded-sm px3 py1 mx-2>{{ loading ? 'Submitting...' : 'Submit Predictions!'}}</button>
   </div>
