@@ -20,7 +20,7 @@ onBeforeMount(() => window.addEventListener('scroll', handleScroll))
 </script>
 
 <template>
-  <header fixed top-0 left-0 w-full p3 z-22 :class="stickyHeader ? 'bg-green-600' : 'bg-transparent'">
+  <header fixed top-0 left-0 w-full p3 z-22 transition :class="stickyHeader ? 'bg-green-600' : 'bg-transparent'">
     <nav flex justify-between items-center>
       <div flex items-center>
         <router-link font-bold text-xl hover:text-green-500 flex items-center to="/"><span inline-block text-white mr3 text-2xl i-iconoir-soccer-ball></span>Pred.io</router-link>
