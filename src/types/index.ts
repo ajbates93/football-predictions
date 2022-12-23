@@ -1,11 +1,23 @@
 
-export interface IFixture {
+export interface IApiResponse {
+  errors: null,
+  paging: null,
+  parameters: [],
+  response: [],
+  results: number,
+}
+
+export interface IRawFixture {
   fixture: {
     date: Date,
     id: number,
     status: {
       long: string,
       short: string
+    },
+    venue: {
+      id: number,
+      name: string
     }
   },
   goals: {
@@ -14,6 +26,7 @@ export interface IFixture {
   }, 
   league: {
     id: number,
+    name: string,
     round: string,
     season: number
   },
@@ -37,6 +50,23 @@ export interface IFixture {
       winner: boolean
     }
   }
+}
+
+export interface IFixture {
+  id: number,
+  created_at: Date,
+  modified_at: Date,
+  date: Date,
+  homeTeamName: string,
+  awayTeamName: string,
+  homeTeamGoals: number,
+  awayTeamGoals: number,
+  leagueId: number,
+  leagueName: string,
+  round: string,
+  status: string,
+  venueId: number,
+  venueName: string
 }
 
 export interface IPredictedFixture {

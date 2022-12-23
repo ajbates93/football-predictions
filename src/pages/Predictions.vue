@@ -4,7 +4,7 @@ import { useStore } from '../store'
 import ComponentWrapper from '../components/ComponentWrapper.vue'
 
 const store = useStore()
-store.fetchFixtures()
+store.fetchFixtures('Regular Season - 17')
 
 const editPredictions = ref(false)
 const savePredictions = ref(false)
@@ -41,7 +41,7 @@ const submit = () => {
         :fixture="fixture"
         :editPrediction="editPredictions" 
         :savePrediction="savePredictions"
-        :key="fixture.fixture.id" />
+        :key="fixture.id" />
       <div my5 flex justify-center>
         <button @click="cancel" v-if="editPredictions"
           bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>

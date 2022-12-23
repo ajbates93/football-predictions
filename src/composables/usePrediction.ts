@@ -1,14 +1,70 @@
 import useSupabase from "./useSupabase";
 import useAuthUser from '../composables/useAuthUser'
-import { IFixture, IPrediction } from "../types";
+import { IFixture, IPrediction, IRawFixture } from "../types"
+import { useExternalFixturesApi } from "../api"
 
 const { user } = useAuthUser()
+const api = useExternalFixturesApi()
 
 export default function usePrediction() {
   const { supabase } = useSupabase()
 
+  const fetchFixturesFromDB = async (round: string) => {
+    const now = new Date()
+    const { data, error } = await supabase
+      .from('fixtures')
+      .select()
+      .eq('round', round)
+
+    if (error) {
+      console.error(error)
+    }
+
+    return data as IFixture[]
+
+    // else {
+    //   if (data?.length === 0)
+    //     initFixtures()
+    // }
+
+  }
+
+  const initFixtures = async () => {
+    let rawFixtures = [] as IRawFixture[]
+    const now = new Date()
+    const { data, status } = await api.fetchFixtures()
+    if (status !== 200)
+      console.error(data.errors)
+    if (data.errors.length > 0)
+      console.error(data.errors)
+    rawFixtures = data.response
+    let fixtures = rawFixtures.map(fixture => ({
+      id: fixture.fixture.id,
+      created_at: now.toISOString(),
+      modified_at: now.toISOString(),
+      date: fixture.fixture.date,
+      homeTeamName: fixture.teams.home.name,
+      awayTeamName: fixture.teams.away.name,
+      homeTeamGoals: fixture.goals.home,
+      awayTeamGoals: fixture.goals.away,
+      leagueId: fixture.league.id,
+      leagueName: fixture.league.name,
+      round: fixture.league.round,
+      status: fixture.fixture.status.long,
+      venueId: fixture.fixture.venue.id,
+      venueName: fixture.fixture.venue.name
+    }))
+
+    const { error } = await supabase
+      .from('fixtures')
+      .insert(fixtures)
+
+    if (error)
+      console.error(error)
+  }
+
   const fetchPredictions = async (fixtures: IFixture[]) => {
-    const ids = fixtures.map(x => x.fixture.id)
+    const ids = fixtures.map(x => x.id)
     const { data, error } = await supabase
       .from('predictions')
       .select()
@@ -86,6 +142,7 @@ export default function usePrediction() {
   }
 
   return {
+    fetchFixturesFromDB,
     fetchPredictions,
     addPrediction,
     addAllPredictions
