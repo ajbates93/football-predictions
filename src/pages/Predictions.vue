@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useStore } from '../store'
-import ComponentWrapper from '../components/ComponentWrapper.vue'
-import Fixture from '../components/Fixture.vue'
+import { ComponentWrapper, Fixture, GameweekSelector } from '../components'
 
 const store = useStore()
 
 onMounted(async () => {
-  await store.fetchFixtures('Regular Season - 17')
+  await store.fetchFixtures(store.selectedGameweekTitle)
   await store.fetchPredictions()
 })
 
@@ -34,17 +33,25 @@ const submit = () => {
   savePredictions.value = false
   loading.value = false
 }
-
 </script>
 
 <template>
   <section text-center mx-auto class="bg-[#242424]" py-20>
     <ComponentWrapper>
-      <h1 text-5xl font-bold mb10 text-center>Fixtures</h1>
+      <h1 text-5xl font-bold mb5 text-center>Fixtures</h1>
+      <GameweekSelector />
       <p v-if="store.loading">Loading...</p>
-      <template v-if="store.orderedFixturesWithPredictions.length === 0">
+      <template v-if="store.orderedFixturesWithPredictions.length === 0 && !store.allFixturesComplete">
         <Fixture v-for="fixture in store.orderedFixtures" 
           :fixture="fixture"
+          :editPrediction="editPredictions" 
+          :savePrediction="savePredictions"
+          :key="fixture.id" />
+      </template>
+      <template v-else-if="store.orderedFixturesWithPredictions.length === 0 && store.allFixturesComplete">
+        <Fixture v-for="fixture in store.orderedFixtures" 
+          :fixture="fixture"
+          complete
           :editPrediction="editPredictions" 
           :savePrediction="savePredictions"
           :key="fixture.id" />
@@ -57,7 +64,7 @@ const submit = () => {
           :savePrediction="savePredictions"
           :key="fixture.id" />
       </template>
-      <div my5 flex justify-center v-if="!store.allFixturesPredicted">
+      <div my5 flex justify-center v-if="!store.allFixturesPredicted && !store.allFixturesComplete">
         <button @click="cancel" v-if="editPredictions"
           bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
         <button @click="edit"  v-if="!editPredictions"

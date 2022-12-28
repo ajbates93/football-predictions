@@ -6,6 +6,15 @@ import { useExternalFixturesApi } from "../api"
 const { user } = useAuthUser()
 const api = useExternalFixturesApi()
 
+const parseIntFromRoundString = (x: string) => {
+  const round = x.match(/\d+/)?.toString()
+  let roundAsNum = 0
+  if (round)
+    roundAsNum = parseInt(round)
+
+  return roundAsNum
+}
+
 export default function usePrediction() {
   const { supabase } = useSupabase()
 
@@ -19,13 +28,13 @@ export default function usePrediction() {
     if (error) {
       console.error(error)
     }
-
-    return data as IFixture[]
-
     // else {
     //   if (data?.length === 0)
     //     initFixtures()
     // }
+
+    return data as IFixture[]
+
 
   }
 
@@ -50,6 +59,7 @@ export default function usePrediction() {
       leagueId: fixture.league.id,
       leagueName: fixture.league.name,
       round: fixture.league.round,
+      roundInt: parseIntFromRoundString(fixture.league.round),
       status: fixture.fixture.status.long,
       venueId: fixture.fixture.venue.id,
       venueName: fixture.fixture.venue.name

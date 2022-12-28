@@ -9,9 +9,20 @@ export const useStore = defineStore('main', {
     predictions: [] as IPrediction[],
     loading: false,
     showLogIn: false,
-    userProfile: {}
+    userProfile: {},
+    gameweek: {
+      title: 'Regular Season - 17',
+      round: 17
+    },
+    selectedGameweek: 17
   }),
   getters: {
+    initialGameweek(): string {
+      return this.fixtures.length > 0 ? this.fixtures[0].round : this.gameweek.title
+    },
+    selectedGameweekTitle(): string {
+      return `Regular Season - ${this.selectedGameweek}`
+    },
     orderedFixtures(): IFixture[] {
       if (this.fixtures.length === 0)
         return []
@@ -59,6 +70,9 @@ export const useStore = defineStore('main', {
 
       const intersection = fIds.filter(x => pfIds.includes(x))
       return intersection.length === fIds.length
+    },
+    allFixturesComplete(): boolean {
+      return this.fixtures.every(x => x.status === 'Match Finished')
     }
   },
   actions: {

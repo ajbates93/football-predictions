@@ -64,6 +64,7 @@ export interface IFixture {
   leagueId: number,
   leagueName: string,
   round: string,
+  roundInt: number,
   status: string,
   venueId: number,
   venueName: string
