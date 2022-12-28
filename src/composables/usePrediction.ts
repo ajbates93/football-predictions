@@ -63,7 +63,7 @@ export default function usePrediction() {
       console.error(error)
   }
 
-  const fetchPredictions = async (fixtures: IFixture[]) => {
+  const fetchPredictionsFromDB = async (fixtures: IFixture[]) => {
     const ids = fixtures.map(x => x.id)
     const { data, error } = await supabase
       .from('predictions')
@@ -143,7 +143,7 @@ export default function usePrediction() {
 
   return {
     fetchFixturesFromDB,
-    fetchPredictions,
+    fetchPredictionsFromDB,
     addPrediction,
     addAllPredictions
   }

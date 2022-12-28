@@ -14,7 +14,7 @@ const logIn = () => store.toggleShowLogIn(true)
     <div class="page-content" flex items-center justify-center flex-col relative z-20 border="b #343434">
       <h1 text-5xl font-bold mb10>Welcome to Pred.io!</h1>
       <h3 text-2xl my5>Predict multiple fixtures each gameweek. Join a league with your friends and compete to be top of the table!</h3>
-      <h3 text-2xl my5>Get started by registering for an account below.</h3>
+      <h3 text-2xl my5 v-if="!isLoggedIn()">Get started by registering for an account below.</h3>
       <div flex justify-center items-center gap-5>
         <template v-if="isLoggedIn()">
           <router-link as="button" to="/predictions" inline-block my5 text-xl bg-green-600 text-white rounded px3 py2>Fixtures &amp; Predictions</router-link>

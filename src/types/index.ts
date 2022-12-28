@@ -71,16 +71,17 @@ export interface IFixture {
 
 export interface IPredictedFixture {
   id: number,
+  date: Date,
   fixtureId: number,
   predictionId: number,
-  homeTeam: string,
-  homeGoals: number,
-  awayTeam: string,
-  awayGoals: number
+  homeTeamName: string,
+  homeTeamGoals: number,
+  awayTeamName: string,
+  awayTeamGoals: number
 }
 
 export interface IPrediction {
-  id?: number | undefined,
+  id: number,
   fixtureId: number,
   homeGoals: number,
   awayGoals: number,

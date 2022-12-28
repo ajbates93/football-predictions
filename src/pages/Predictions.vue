@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useStore } from '../store'
 import ComponentWrapper from '../components/ComponentWrapper.vue'
+import Fixture from '../components/Fixture.vue'
 
 const store = useStore()
-store.fetchFixtures('Regular Season - 17')
+
+onMounted(async () => {
+  await store.fetchFixtures('Regular Season - 17')
+  await store.fetchPredictions()
+})
 
 const editPredictions = ref(false)
 const savePredictions = ref(false)
@@ -37,12 +42,22 @@ const submit = () => {
     <ComponentWrapper>
       <h1 text-5xl font-bold mb10 text-center>Fixtures</h1>
       <p v-if="store.loading">Loading...</p>
-      <Fixture v-for="fixture in store.orderedFixtures" 
-        :fixture="fixture"
-        :editPrediction="editPredictions" 
-        :savePrediction="savePredictions"
-        :key="fixture.id" />
-      <div my5 flex justify-center>
+      <template v-if="store.orderedFixturesWithPredictions.length === 0">
+        <Fixture v-for="fixture in store.orderedFixtures" 
+          :fixture="fixture"
+          :editPrediction="editPredictions" 
+          :savePrediction="savePredictions"
+          :key="fixture.id" />
+      </template>
+      <template v-else>
+        <Fixture v-for="fixture in store.orderedFixturesWithPredictions" 
+          :fixture="fixture"
+          complete
+          :editPrediction="editPredictions" 
+          :savePrediction="savePredictions"
+          :key="fixture.id" />
+      </template>
+      <div my5 flex justify-center v-if="!store.allFixturesPredicted">
         <button @click="cancel" v-if="editPredictions"
           bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
         <button @click="edit"  v-if="!editPredictions"

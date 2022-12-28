@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
-import { useStorage } from '@vueuse/core'
 import { IFixture, IPredictedFixture, IPrediction } from '../types'
-import { mande, Options, OptionsRaw } from 'mande'
 import usePrediction from '../composables/usePrediction'
 import useProfile from '../composables/useProfile'
 
@@ -37,12 +35,13 @@ export const useStore = defineStore('main', {
           if (f) {
             let c: IPredictedFixture = {
               id: 0,
+              date: f.date,
               fixtureId: f.id,
               predictionId: x.id,
-              homeTeam: f.homeTeamName,
-              homeGoals: x.homeGoals,
-              awayTeam: f.awayTeamName,
-              awayGoals: x.awayGoals,
+              homeTeamName: f.homeTeamName,
+              homeTeamGoals: x.homeGoals,
+              awayTeamName: f.awayTeamName,
+              awayTeamGoals: x.awayGoals,
             }
             combined.push(c)
           }
@@ -53,6 +52,13 @@ export const useStore = defineStore('main', {
         console.error(error)
         return []
       }
+    },
+    allFixturesPredicted(): boolean {
+      const fIds = this.fixtures.map(x => x.id)
+      const pfIds = this.predictions.map(x => x.fixtureId)
+
+      const intersection = fIds.filter(x => pfIds.includes(x))
+      return intersection.length === fIds.length
     }
   },
   actions: {
@@ -72,8 +78,8 @@ export const useStore = defineStore('main', {
       }
     },
     fetchPredictions() {
-      const { fetchPredictions } = usePrediction()
-      fetchPredictions(this.fixtures)
+      const { fetchPredictionsFromDB } = usePrediction()
+      fetchPredictionsFromDB(this.fixtures)
         .then((res: IPrediction[] | undefined) => {
           if (res)
             this.predictions = res
