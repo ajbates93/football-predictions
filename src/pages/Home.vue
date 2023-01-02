@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useStore } from '../store'
-import useAuthUser from '../composables/useAuthUser'
+import { useStore } from '@/store'
+import { useAuthUser } from '@/composables'
 
 const store = useStore()
 const { isLoggedIn } = useAuthUser()

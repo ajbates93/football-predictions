@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
-import { IFixture, IPredictedFixture, IPrediction } from '../types'
-import usePrediction from '../composables/usePrediction'
-import useProfile from '../composables/useProfile'
+import { IFixture, IPredictedFixture, IPrediction } from '@/types'
+import { usePrediction, useProfile } from '@/composables'
 
 export const useStore = defineStore('main', {
   state: () => ({

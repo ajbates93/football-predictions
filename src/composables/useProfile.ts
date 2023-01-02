@@ -1,5 +1,4 @@
-import useSupabase from "./useSupabase"
-import useAuthUser from '../composables/useAuthUser'
+import { useAuthUser, useSupabase } from '@/composables'
 
 const { user } = useAuthUser()
 

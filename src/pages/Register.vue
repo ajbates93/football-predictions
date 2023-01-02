@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import useAuthUser from '../composables/useAuthUser'
+import { useAuthUser } from '@/composables'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const { register } = useAuthUser()

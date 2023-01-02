@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useStore } from '../store'
-import useAuthUser from '../composables/useAuthUser'
 import { onBeforeMount, ref } from 'vue';
+import { useStore } from '@/store'
+import { useAuthUser } from '@/composables'
 import { useDark, useToggle } from '@vueuse/core'
 const store = useStore()
 const logIn = () => store.toggleShowLogIn(true)

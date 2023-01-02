@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useStore } from '../store'
-import { IFixture, IPredictedFixture } from '../types';
+import { useStore } from '@/store'
+import { IFixture, IPredictedFixture } from '@/types';
 
 const store = useStore()
 const props = defineProps<{

@@ -1,7 +1,6 @@
-import useSupabase from "./useSupabase";
-import useAuthUser from '../composables/useAuthUser'
-import { IFixture, IPrediction, IRawFixture } from "../types"
-import { useExternalFixturesApi } from "../api"
+import { useAuthUser, useSupabase } from '@/composables'
+import { IFixture, IPrediction, IRawFixture } from "@/types"
+import { useExternalFixturesApi } from "@/api"
 
 const { user } = useAuthUser()
 const api = useExternalFixturesApi()

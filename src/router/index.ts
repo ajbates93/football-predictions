@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import useAuthUser from '../composables/useAuthUser'
+import { useAuthUser } from '@/composables'
 
 const routes: Array<RouteRecordRaw> = [
   {

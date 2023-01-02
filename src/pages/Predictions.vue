@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { useStore } from '../store'
-import { ComponentWrapper, Fixture, GameweekSelector } from '../components'
+import { onMounted, ref } from 'vue';
+import { useStore } from '@/store'
+import { ComponentWrapper, Fixture, GameweekSelector } from '@/components'
 
 const store = useStore()
 

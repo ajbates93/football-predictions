@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useStore } from '../store'
+import { watch } from 'vue';
+import { useStore } from '@/store'
 
 const store = useStore()
 

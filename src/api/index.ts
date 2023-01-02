@@ -1,4 +1,4 @@
-import { IApiResponse } from '../types'
+import { IApiResponse } from '@/types'
 import { api } from './config'
 
 
