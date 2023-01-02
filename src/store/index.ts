@@ -10,10 +10,10 @@ export const useStore = defineStore('main', {
     showLogIn: false,
     userProfile: {},
     gameweek: {
-      title: 'Regular Season - 17',
-      round: 17
+      title: 'Regular Season - 19',
+      round: 19
     },
-    selectedGameweek: 17
+    selectedGameweek: 19
   }),
   getters: {
     initialGameweek(): string {

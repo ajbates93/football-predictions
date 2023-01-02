@@ -1,11 +1,10 @@
+// import { URL, fileURLToPath } from 'url'
+
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from 'url'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import { presetAttributify, presetUno, presetIcons } from 'unocss'
 import Components from 'unplugin-vue-components/vite'
-
-const base = new URL("./src", import.meta.url)
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,7 +21,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(base)
+      "@": "http://127.0.0.1:5173/src",
     }
   },
 })
