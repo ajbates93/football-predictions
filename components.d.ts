@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     Fixture: typeof import('./src/components/Fixture.vue')['default']
     GameweekSelector: typeof import('./src/components/GameweekSelector.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
+    Loading: typeof import('./src/components/Loading.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
