@@ -8,6 +8,7 @@ export const useStore = defineStore('main', {
     predictions: [] as IPrediction[],
     loading: false,
     showLogIn: false,
+    showLogOut: false,
     userProfile: {},
     gameweek: {
       title: 'Regular Season - 19',
