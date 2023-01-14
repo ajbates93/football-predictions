@@ -40,6 +40,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/email-confirmation',
     name: 'EmailConfirmation',
     component: () => import('../pages/EmailConfirmation.vue')
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('../pages/Admin.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true
+    }
   }
 ]
 
@@ -49,8 +58,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const { isLoggedIn } = useAuthUser()
-  if (!isLoggedIn() && to.meta.requiresAuth)
+  const { isLoggedIn, isAdmin } = useAuthUser()
+  if ((!isLoggedIn() && to.meta.requiresAuth) || (!isAdmin && to.meta.requiresAdmin))
     return { name: "home" }
 })
 

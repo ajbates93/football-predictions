@@ -37,6 +37,10 @@ export default function useAuthUser() {
     return !!user.value
   }
 
+  const isAdmin = () => {
+    return !!user.value && user.value.email === "ajbates93@gmail.com"
+  }
+
   const sendPasswordResetEmail = async (email: string) => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email)
     if (error) throw error
@@ -48,6 +52,7 @@ export default function useAuthUser() {
     signIn,
     signInWithGoogle,
     signOut,
-    isLoggedIn
+    isLoggedIn,
+    isAdmin
   }
 }

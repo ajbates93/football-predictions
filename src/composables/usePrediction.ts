@@ -18,26 +18,20 @@ export default function usePrediction() {
   const { supabase } = useSupabase()
 
   const fetchFixturesFromDB = async (round: string) => {
-    const now = new Date()
     const { data, error } = await supabase
       .from('fixtures')
       .select()
       .eq('round', round)
+      .order('date')
 
     if (error) {
       console.error(error)
     }
-    // else {
-    //   if (data?.length === 0)
-    //     initFixtures()
-    // }
 
     return data as IFixture[]
-
-
   }
 
-  const initFixtures = async () => {
+  const syncFixturesFromApiToDb = async () => {
     let rawFixtures = [] as IRawFixture[]
     const now = new Date()
     const { data, status } = await api.fetchFixtures()
@@ -66,10 +60,19 @@ export default function usePrediction() {
 
     const { error } = await supabase
       .from('fixtures')
-      .insert(fixtures)
+      .upsert(fixtures)
 
     if (error)
       console.error(error)
+    else {
+      const { error } = await supabase
+        .from('syncs')
+        .insert({ sync_date: now.toISOString() })
+
+      if (error)
+        console.error(error)
+    }
+
   }
 
   const fetchPredictionsFromDB = async (fixtures: IFixture[]) => {
@@ -92,6 +95,20 @@ export default function usePrediction() {
       })
       return predictions
     }
+  }
+
+  const fetchLastSyncFromDB = async () => {
+    const { data, error } = await supabase
+      .from('syncs')
+      .select()
+      .order('sync_date', { ascending: false })
+      .limit(1)
+
+    if (error)
+      console.error(error)
+    
+    if (data)
+      return data[0]
   }
 
   const addPrediction = async (prediction: IPrediction) => {
@@ -154,7 +171,9 @@ export default function usePrediction() {
     fetchFixturesFromDB,
     fetchPredictionsFromDB,
     addPrediction,
-    addAllPredictions
+    addAllPredictions,
+    syncFixturesFromApiToDb,
+    fetchLastSyncFromDB
   }
   
 }

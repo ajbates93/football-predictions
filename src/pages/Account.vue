@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { useAuthUser } from '@/composables'
 import { useStore } from '@/store'
-import ComponentWrapper from '@/components/ComponentWrapper.vue'
+import { ComponentWrapper } from '@/components'
 const { user, isLoggedIn } = useAuthUser()
 const store = useStore()
 
