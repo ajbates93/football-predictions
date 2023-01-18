@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useStore } from '@/store'
-import { ComponentWrapper, Fixture, GameweekSelector, Loading } from '@/components'
+import { ComponentWrapper, Fixture, GameweekSelector, Loading, Legend } from '@/components'
 
 const store = useStore()
 
@@ -90,4 +90,5 @@ const submit = () => {
       </template>
     </ComponentWrapper>
   </section>
+  <Legend />
 </template>
