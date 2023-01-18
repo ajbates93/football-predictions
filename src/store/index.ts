@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
-import { IFixture, IPredictedFixture, IPrediction } from '@/types'
+import { ICompletePredictedFixture, ICreatePrediction, IFixture, IPredictedFixture, IPrediction } from '@/types'
 import { usePrediction, useProfile } from '@/composables'
 
 export const useStore = defineStore('main', {
   state: () => ({
     fixtures: [] as IFixture[],
     predictions: [] as IPrediction[],
+    newPredictions: [] as ICreatePrediction[],
     loading: false,
     showLogIn: false,
     showLogOut: false,
@@ -22,6 +23,9 @@ export const useStore = defineStore('main', {
     },
     selectedGameweekTitle(): string {
       return `Regular Season - ${this.selectedGameweek}`
+    },
+    selectedGameweekNumber(): number {
+      return this.selectedGameweek
     },
     orderedFixtures(): IFixture[] {
       if (this.fixtures.length === 0)
@@ -41,11 +45,11 @@ export const useStore = defineStore('main', {
         let fixtures = this.orderedFixtures
         let predictions = this.predictions
         let combined: IPredictedFixture[] = []
-        predictions.map((x) => {
+        predictions.map((x, idx) => {
           let f = fixtures.find(y => y.id === x.fixtureId)
           if (f) {
             let c: IPredictedFixture = {
-              id: 0,
+              id: x.id,
               date: f.date,
               fixtureId: f.id,
               predictionId: x.id,
@@ -64,15 +68,45 @@ export const useStore = defineStore('main', {
         return []
       }
     },
-    allFixturesPredicted(): boolean {
+    orderedCompletedFixturesWithPredictions(): ICompletePredictedFixture[] {
+      const predictedFixtures = this.orderedFixturesWithPredictions
+      try {
+        let fixtures = this.orderedFixtures
+        let complete: ICompletePredictedFixture[] = []
+        predictedFixtures.map(x => {
+          let f = fixtures.find(y => y.id === x.fixtureId)
+          if (f) {
+            let cpf: ICompletePredictedFixture = {
+              ...x,
+              actualHomeTeamGoals: f.homeTeamGoals,
+              actualAwayTeamGoals: f.awayTeamGoals
+            }
+
+            complete.push(cpf)
+          }
+        })
+        return complete
+      } catch (error) {
+        console.error(error)
+        return []
+      }
+    },
+    allFixturesSaved(): boolean {
+      const fIds = this.fixtures.map(x => x.id)
+      const npfIds = this.newPredictions.map(x => x.fixtureId)
+
+      const intersection = fIds.filter(x => npfIds.includes(x))
+      return intersection.length === fIds.length
+    },
+    allFixturesComplete(): boolean {
+      return this.fixtures.every(x => x.status === 'Match Finished')
+    },
+    allPredictionsSubmitted(): boolean {
       const fIds = this.fixtures.map(x => x.id)
       const pfIds = this.predictions.map(x => x.fixtureId)
 
       const intersection = fIds.filter(x => pfIds.includes(x))
       return intersection.length === fIds.length
-    },
-    allFixturesComplete(): boolean {
-      return this.fixtures.every(x => x.status === 'Match Finished')
     }
   },
   actions: {
@@ -91,25 +125,26 @@ export const useStore = defineStore('main', {
         this.loading = false
       }
     },
-    fetchPredictions() {
+    async fetchPredictions() {
       const { fetchPredictionsFromDB } = usePrediction()
-      fetchPredictionsFromDB(this.fixtures)
-        .then((res: IPrediction[] | undefined) => {
-          if (res)
-            this.predictions = res
-        })
+      try {
+        const predictions = await fetchPredictionsFromDB(this.fixtures)
+        this.predictions = predictions as IPrediction[]
+      } catch (ex: any) {
+        console.error(ex)
+      }
     },
-    savePrediction(prediction: IPrediction) {
+    savePrediction(prediction: ICreatePrediction) {
       const pIdx = this.predictions.findIndex(x => x.fixtureId === prediction.fixtureId)
       if (pIdx === -1) 
-        this.predictions.push(prediction)
+        this.newPredictions.push(prediction)
       else 
-        this.predictions[pIdx] = prediction
+        this.newPredictions[pIdx] = prediction
     },
     insertPredictions() {
       const { addAllPredictions } = usePrediction()
-      if (this.predictions.length > 0)
-        addAllPredictions(this.predictions)
+      if (this.newPredictions.length > 0)
+        addAllPredictions(this.newPredictions)
     },
     fetchUserProfile() {
       const { fetchProfile } = useProfile()

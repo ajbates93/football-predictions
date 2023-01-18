@@ -81,7 +81,28 @@ export interface IPredictedFixture {
   awayTeamGoals: number
 }
 
+export interface ICompletePredictedFixture extends IPredictedFixture {
+  actualHomeTeamGoals: number,
+  actualAwayTeamGoals: number
+}
+
 export interface IPrediction {
+  id: number,
+  userId: string,
+  fixtureId: number,
+  dateSubmitted: Date,
+  dateModified?: Date,
+  homeGoals: number,
+  awayGoals: number,
+  homeWin: boolean,
+  awayWin: boolean,
+  xGprediction: number,
+  gameComplete: boolean,
+  roundComplete: boolean,
+  pointsScored: number
+}
+
+export interface ICreatePrediction {
   id: number,
   fixtureId: number,
   homeGoals: number,

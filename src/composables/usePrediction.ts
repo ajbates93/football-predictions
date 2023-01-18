@@ -1,5 +1,5 @@
 import { useAuthUser, useSupabase } from '@/composables'
-import { IFixture, IPrediction, IRawFixture } from "@/types"
+import { ICreatePrediction, IFixture, IPrediction, IRawFixture } from "@/types"
 import { useExternalFixturesApi } from "@/api"
 
 const { user } = useAuthUser()
@@ -82,19 +82,10 @@ export default function usePrediction() {
       .select()
       .in('fixtureId', ids)
 
-    if (data) {
-      let predictions: IPrediction[] = data.map(x => {
-        let p: IPrediction = {
-          id: x.id,
-          fixtureId: x.fixtureId,
-          homeGoals: x.homeGoals,
-          awayGoals: x.awayGoals,
-          xG: x.xGprediction
-        }
-        return p
-      })
-      return predictions
-    }
+    if (error)
+      console.error(error)
+
+    return data
   }
 
   const fetchLastSyncFromDB = async () => {
@@ -135,13 +126,12 @@ export default function usePrediction() {
       throw error
   }
 
-  const addAllPredictions = async (predictions: IPrediction[]) => {
+  const addAllPredictions = async (predictions: ICreatePrediction[]) => {
     let inserts = []
     
     for (let x = 0; x < predictions.length; x++) {
       const prediction = predictions[x]
       const p = {
-        id: prediction.id,
         userId: user.value?.id,
         fixtureId: prediction.fixtureId,
         dateSubmitted: new Date(),
@@ -160,7 +150,7 @@ export default function usePrediction() {
 
     const { error } = await supabase
       .from('predictions')
-      .upsert(inserts)
+      .insert(inserts)
       // .upsert(inserts, { onConflict: 'fixtureId,userId'})
 
     if (error)

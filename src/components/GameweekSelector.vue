@@ -4,7 +4,10 @@ import { useStore } from '@/store'
 
 const store = useStore()
 
-watch(() => store.selectedGameweekTitle, (value) => store.fetchFixtures(value))
+watch(() => store.selectedGameweekTitle, async (value) => { 
+  await store.fetchFixtures(value) 
+  await store.fetchPredictions()
+})
 </script>
 
 <template>

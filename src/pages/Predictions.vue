@@ -49,7 +49,8 @@ const submit = () => {
             :fixture="fixture"
             :editPrediction="editPredictions" 
             :savePrediction="savePredictions"
-            :key="fixture.id" />
+            :key="fixture.id"
+            :fixtureId="fixture.id" />
         </template>
         <template v-else-if="store.orderedFixturesWithPredictions.length === 0 && store.allFixturesComplete">
           <Fixture v-for="fixture in store.orderedFixtures" 
@@ -57,27 +58,34 @@ const submit = () => {
             complete
             :editPrediction="editPredictions" 
             :savePrediction="savePredictions"
-            :key="fixture.id" />
+            :key="fixture.id"
+            :fixtureId="fixture.id" />
         </template>
         <template v-else>
-          <Fixture v-for="fixture in store.orderedFixturesWithPredictions" 
+          <Fixture v-for="fixture in store.orderedCompletedFixturesWithPredictions" 
             :fixture="fixture"
             complete
             :editPrediction="editPredictions" 
             :savePrediction="savePredictions"
-            :key="fixture.id" />
+            :key="fixture.id"
+            :fixtureId="fixture.fixtureId" />
         </template>
-        <div my5 flex justify-center v-if="!store.allFixturesPredicted && !store.allFixturesComplete">
-          <button @click="cancel" v-if="editPredictions"
-            bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
-          <button @click="edit"  v-if="!editPredictions && store.selectedGameweek == store.gameweek.round"
-            bg-green-600 text-white rounded-sm px3 py1 mx-2>Make Predictions!</button>
-          <button v-if="editPredictions" @click="save" 
-            bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
+        <div v-if="!store.allPredictionsSubmitted">
+          <div my5 flex justify-center v-if="!store.allFixturesComplete">
+            <button @click="cancel" v-if="editPredictions"
+              bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
+            <button @click="edit"  v-if="!editPredictions && store.selectedGameweek == store.gameweek.round"
+              bg-green-600 text-white rounded-sm px3 py1 mx-2>{{ store.newPredictions.length === 0 ? 'Make' : 'Edit' }} Predictions</button>
+            <button v-if="editPredictions" @click="save" 
+              bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions</button>
+          </div>
+          <div my5 flex justify-center>
+            <button v-if="!editPredictions && savePredictions" @click="submit" 
+              bg-red-600 text-white rounded-sm px3 py1 mx-2>{{ loading ? 'Submitting...' : 'Submit Predictions'}}</button>
+          </div>
         </div>
-        <div my5 flex justify-center>
-          <button v-if="!editPredictions && savePredictions" @click="submit" 
-            bg-red-600 text-white rounded-sm px3 py1 mx-2>{{ loading ? 'Submitting...' : 'Submit Predictions!'}}</button>
+        <div v-else my-5 inline-flex mx-auto items-center text-lg>
+          All predictions have been submitted - good luck! <i i-carbon-checkmark-outline text-green-600 inline-block ml-2 text-lg></i>
         </div>
       </template>
     </ComponentWrapper>
