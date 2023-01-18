@@ -12,6 +12,7 @@ const lastSync = ref<string>("")
 const sync = async () => {
   loading.value = true
   await syncFixturesFromApiToDb()
+  await fetchLastSync()
   loading.value = false
 }
 
