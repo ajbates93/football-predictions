@@ -70,7 +70,7 @@ const submit = () => {
         <div my5 flex justify-center v-if="!store.allFixturesPredicted && !store.allFixturesComplete">
           <button @click="cancel" v-if="editPredictions"
             bg-gray-600 text-white rounded-sm px3 py1 mx-2>Cancel</button>
-          <button @click="edit"  v-if="!editPredictions"
+          <button @click="edit"  v-if="!editPredictions && store.selectedGameweek == store.gameweek.round"
             bg-green-600 text-white rounded-sm px3 py1 mx-2>Make Predictions!</button>
           <button v-if="editPredictions" @click="save" 
             bg-green-600 text-white rounded-sm px3 py1 mx-2>Save Predictions!</button>
