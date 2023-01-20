@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useStore } from '@/store'
-import { ComponentWrapper, Fixture, GameweekSelector, Loading, Legend } from '@/components'
+import { ComponentWrapper, GameweekSelector, Loading, Legend } from '@/components'
+import { Fixture } from '@/components/fixture'
 
 const store = useStore()
 
@@ -44,32 +45,13 @@ const submit = () => {
         <Loading />
       </p>
       <template v-else>
-        <template v-if="store.orderedFixturesWithPredictions.length === 0 && !store.allFixturesComplete">
-          <Fixture v-for="fixture in store.orderedFixtures" 
-            :fixture="fixture"
-            :editPrediction="editPredictions" 
-            :savePrediction="savePredictions"
-            :key="fixture.id"
-            :fixtureId="fixture.id" />
-        </template>
-        <template v-else-if="store.orderedFixturesWithPredictions.length === 0 && store.allFixturesComplete">
-          <Fixture v-for="fixture in store.orderedFixtures" 
-            :fixture="fixture"
-            complete
-            :editPrediction="editPredictions" 
-            :savePrediction="savePredictions"
-            :key="fixture.id"
-            :fixtureId="fixture.id" />
-        </template>
-        <template v-else>
-          <Fixture v-for="fixture in store.orderedCompletedFixturesWithPredictions" 
-            :fixture="fixture"
-            complete
-            :editPrediction="editPredictions" 
-            :savePrediction="savePredictions"
-            :key="fixture.id"
-            :fixtureId="fixture.fixtureId" />
-        </template>
+        <Fixture v-for="fixture in store.orderedCompletedFixturesWithPredictions"
+          :fixture="fixture"
+          :editPrediction="editPredictions" 
+          :savePrediction="savePredictions"
+          :key="fixture.id"
+          :fixtureId="fixture.id"
+          :complete="store.allFixturesComplete || store.selectedGameweek < store.gameweek.round" />
         <div v-if="!store.allPredictionsSubmitted">
           <div my5 flex justify-center v-if="!store.allFixturesComplete">
             <button @click="cancel" v-if="editPredictions"
