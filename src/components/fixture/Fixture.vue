@@ -77,9 +77,9 @@ if (first)
   </div>
   <div v-if="complete && !editPrediction"
     grid mb2 style="grid-template-columns: 3fr 25px 3fr">
-    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-gray-600>{{fixture.homeTeamGoals}}</span>
+    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-gray-600>{{fixture.homeTeamGoals !== null ? fixture.homeTeamGoals : 'PST' }}</span>
     <span text-center px1 inline-block text-gray-400>-</span>
-    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-gray-600>{{fixture.awayTeamGoals}}</span>
+    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-gray-600>{{fixture.awayTeamGoals !== null ? fixture.awayTeamGoals : 'PST' }}</span>
   </div>
 </div>
 </template>

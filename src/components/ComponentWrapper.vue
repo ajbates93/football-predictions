@@ -1,5 +1,4 @@
 <template>
-  <div class="page-background" absolute left-0 top-0 w-full h-full z-18></div>
   <div relative z-20>
     <slot />
   </div>
