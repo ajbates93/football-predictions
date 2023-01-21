@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useStore } from '@/store'
-import { IFixture, IPredictedFixture, ICreatePrediction, ICompletePredictedFixture } from '@/types';
+import { IPredictedFixture, ICompletePredictedFixture } from '@/types';
 
 const store = useStore()
 const props = defineProps<{
-  fixture: IFixture | IPredictedFixture
+  fixture: ICompletePredictedFixture
   editPrediction: boolean,
   savePrediction: boolean,
   complete?: boolean,
@@ -14,6 +14,8 @@ const props = defineProps<{
 
 const homePrediction = ref(0)
 const awayPrediction = ref(0)
+
+const predictionFromDb = store.predictions.find(x => x.fixtureId === props.fixture.fixtureId)
 
 const hasCompletePrediction = ref(false)
 let completePrediction = ref<IPredictedFixture>()
@@ -69,16 +71,17 @@ if (first)
     <span text-center px1 inline-block text-gray-400>-</span>
     <input inputmode="numeric" rounded-sm justify-self-start mx1 inline-block w-10 text-center v-model="awayPrediction" />
   </div>
-  <div v-if="store.newPredictions.some(x => x.fixtureId === props.fixture.id) && !props.editPrediction" mb1 grid style="grid-template-columns: 3fr 25px 3fr">
-    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-green-700>{{homePrediction}}</span>
+  <div v-if="predictionFromDb"
+    grid mb2 style="grid-template-columns: 3fr 25px 3fr">
+    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-green-700>{{predictionFromDb.homeGoals}}</span>
     <span text-center px1 inline-block text-gray-400>-</span>
-    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-green-700>{{awayPrediction}}</span>
+    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-green-700>{{predictionFromDb.awayGoals}}</span>
   </div>
   <div v-if="complete && !editPrediction"
     grid mb2 style="grid-template-columns: 3fr 25px 3fr">
-    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-green-700>{{fixture.homeTeamGoals}}</span>
+    <span rounded-sm justify-self-end mx1 inline-block w-10 text-center bg-gray-600>{{fixture.homeTeamGoals}}</span>
     <span text-center px1 inline-block text-gray-400>-</span>
-    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-green-700>{{fixture.awayTeamGoals}}</span>
+    <span rounded-sm justify-self-start mx1 inline-block w-10 text-center bg-gray-600>{{fixture.awayTeamGoals}}</span>
   </div>
 </div>
 </template>

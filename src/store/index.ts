@@ -39,13 +39,29 @@ export const useStore = defineStore('main', {
       }
     },
     orderedFixturesWithPredictions(): IPredictedFixture[] {
-      if (this.fixtures.length === 0 || this.predictions.length === 0)
+      if (this.fixtures.length === 0)
         return []
+      if (this.predictions.length === 0) {
+        let combined: IPredictedFixture[] = []
+        this.orderedFixtures.map(x => {
+          combined.push({
+            ...x,
+            date: x.date,
+            fixtureId: x.id,
+            predictionId: -1,
+            homeTeamName: x.homeTeamName,
+            homeTeamGoals: x.homeTeamGoals,
+            awayTeamName: x.awayTeamName,
+            awayTeamGoals: x.awayTeamGoals
+          })
+        })
+        return combined
+      }
       try {
         let fixtures = this.orderedFixtures
         let predictions = this.predictions
         let combined: IPredictedFixture[] = []
-        predictions.map((x, idx) => {
+        predictions.map((x) => {
           let f = fixtures.find(y => y.id === x.fixtureId)
           if (f) {
             let c: IPredictedFixture = {

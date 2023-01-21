@@ -7,8 +7,10 @@ import { Fixture } from '@/components/fixture'
 const store = useStore()
 
 onMounted(async () => {
-  await store.fetchFixtures(store.selectedGameweekTitle)
-  await store.fetchPredictions()
+  await Promise.allSettled([
+    await store.fetchFixtures(store.selectedGameweekTitle),
+    await store.fetchPredictions()
+  ])
 })
 
 const editPredictions = ref(false)

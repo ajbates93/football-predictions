@@ -11,7 +11,7 @@
         <span h-5 w-8 bg-green-600 rounded-sm inline-block></span><span ml-2> - Your prediction</span>
       </div>
       <div flex items-center my1>
-        <span h-5 w-8 bg-blue-600 rounded-sm inline-block></span><span ml-2> - Actual result</span>
+        <span h-5 w-8 bg-gray-600 rounded-sm inline-block></span><span ml-2> - Actual result</span>
       </div>
     </div>
   </div>
