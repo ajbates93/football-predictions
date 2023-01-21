@@ -48,11 +48,9 @@ watch(() => store.orderedFixturesWithPredictions, (value, oldValue) => {
 })
 
 const showDate = ref<boolean>(false)
-const first = !props.complete 
-  ? store.orderedCompletedFixturesWithPredictions.find(x => new Date(x.date).toLocaleDateString() === new Date(props.fixture.date).toLocaleDateString())?.fixtureId
-  : store.orderedFixtures.find(x => new Date(x.date).toLocaleDateString() === new Date(props.fixture.date).toLocaleDateString())?.id
+const first = store.orderedCompletedFixturesWithPredictions.find(x => new Date(x.date).toLocaleDateString() === new Date(props.fixture.date).toLocaleDateString())?.fixtureId
 if (first)
-  showDate.value = first === props.fixtureId
+  showDate.value = first === props.fixture.fixtureId
   
 </script>
 
