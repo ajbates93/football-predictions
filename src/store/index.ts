@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ICompletePredictedFixture, ICreatePrediction, IFixture, IPredictedFixture, IPrediction } from '@/types'
+import { ICompletePredictedFixture, ICreatePrediction, IFixture, ILeague, IPredictedFixture, IPrediction, IProfile } from '@/types'
 import { usePrediction, useProfile } from '@/composables'
 
 export const useStore = defineStore('main', {
@@ -10,7 +10,8 @@ export const useStore = defineStore('main', {
     loading: false,
     showLogIn: false,
     showLogOut: false,
-    userProfile: {},
+    userProfile: {} as IProfile,
+    userLeagues: [] as ILeague[],
     gameweek: {
       title: 'Regular Season - 21',
       round: 21
@@ -162,9 +163,19 @@ export const useStore = defineStore('main', {
       if (this.newPredictions.length > 0)
         addAllPredictions(this.newPredictions)
     },
-    fetchUserProfile() {
-      const { fetchProfile } = useProfile()
-      this.userProfile = fetchProfile()
+    async fetchUserProfile() {
+      const { fetchProfileFromDb } = useProfile()
+      this.userProfile = await fetchProfileFromDb()
+    },
+    async fetchUserLeagues() {
+      const { fetchLeaguesFromDb } = useProfile()
+      this.userLeagues = await fetchLeaguesFromDb() as ILeague[]
+    },
+    async createLeague(leagueName: string) {
+      const { createLeagueOnDb } = useProfile()
+      const newLeague = await createLeagueOnDb(leagueName)
+      if (newLeague)
+        this.userLeagues.push(newLeague)
     },
     toggleShowLogIn(show: boolean) {
       this.showLogIn = show

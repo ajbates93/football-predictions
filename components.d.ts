@@ -8,7 +8,6 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     ComponentWrapper: typeof import('./src/components/ComponentWrapper.vue')['default']
-    copy: typeof import('./src/components/Login copy.vue')['default']
     Fixture: typeof import('./src/components/fixture/Fixture.vue')['default']
     FixturePrediction: typeof import('./src/components/fixture/FixturePrediction.vue')['default']
     FixtureResult: typeof import('./src/components/fixture/FixtureResult.vue')['default']

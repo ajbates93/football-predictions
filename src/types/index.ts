@@ -109,3 +109,22 @@ export interface ICreatePrediction {
   awayGoals: number,
   xG: number
 }
+
+export interface ILeague {
+  id: number,
+  created_at: Date,
+  modified_at: Date,
+  created_by: string,
+  name: string
+}
+
+export interface IProfile {
+  id: number,
+  userId: string,
+  firstName: string,
+  lastName: string,
+  createdAt: Date,
+  modifiedAt: Date,
+  teamName: string,
+  points: number
+}

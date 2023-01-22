@@ -53,6 +53,6 @@ export default function useAuthUser() {
     signInWithGoogle,
     signOut,
     isLoggedIn,
-    isAdmin
+    isAdmin,
   }
 }
