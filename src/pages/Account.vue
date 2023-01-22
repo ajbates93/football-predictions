@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useAuthUser } from '@/composables'
 import { useStore } from '@/store'
-import { ComponentWrapper } from '@/components'
+import { ComponentWrapper, Loading } from '@/components'
 const { user, isLoggedIn } = useAuthUser()
 const store = useStore()
 
@@ -15,6 +15,7 @@ const submit = async () => {
   try {
     await store.createLeague(newLeague.value)
     toggleCreate.value = false
+    newLeague.value = ''
   } catch (ex: any) {
     console.error(ex)
   } finally {
@@ -23,8 +24,12 @@ const submit = async () => {
 }
 
 onMounted(async () => {
-  await store.fetchUserProfile()
-  await store.fetchUserLeagues()
+  loading.value = true
+  const [ profile, leagues ] = await Promise.allSettled([
+    await store.fetchUserProfile(),
+    await store.fetchUserLeagues()
+  ])
+  loading.value = false
 })
 
 </script>
@@ -56,10 +61,15 @@ onMounted(async () => {
           <div font-bold>League Name</div>
           <div font-bold>Position</div>
           <div font-bold>Number of Teams</div>
-          <template v-for="league in store.userLeagues">
-            <div>{{ league.name }}</div>
-            <div>8th</div>
-            <div>24</div>
+          <template v-if="loading">
+            <Loading class="mx-auto text-center" />
+          </template>
+          <template v-else>
+            <template v-for="league in store.userLeagues">
+              <div>{{ league.name }}</div>
+              <div>8th</div>
+              <div>24</div>
+            </template>
           </template>
         </div>
         <p v-else class='bg-#343434' inline-block px2 rounded-sm py2 text-lg>😟 Looks like you're not in any leagues. Join a league with a code or create your own!</p>
