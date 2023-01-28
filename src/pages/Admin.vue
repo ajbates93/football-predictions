@@ -7,6 +7,7 @@ const { isAdmin } = useAuthUser()
 const { syncFixturesFromApiToDb, fetchLastSyncFromDB } = usePrediction()
 
 const loading = ref(false)
+const syncCompleted = ref(false)
 const lastSync = ref<string>("")
 
 const sync = async () => {
@@ -18,8 +19,10 @@ const sync = async () => {
 
 const fetchLastSync = async () => {
   const res = await fetchLastSyncFromDB()
-  if (res)
+  if (res) {
     lastSync.value = new Date(res.sync_date).toLocaleDateString('en-UK')
+    syncCompleted.value = true
+  }
   else
     lastSync.value = "Could not retrieve sync data."
 }
@@ -39,6 +42,7 @@ fetchLastSync()
         text-2xl text-white rounded px3 py1 mx-2 
         :disabled="loading">{{ loading ? 'Syncing...' : 'Sync Results' }}</button>
       <Loading v-if="loading" />
+      <div v-if="syncCompleted" text-green-600>Sync Completed!</div>
     </ComponentWrapper>
   </section>
 </template>
