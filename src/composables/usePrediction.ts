@@ -184,9 +184,13 @@ export default function usePrediction() {
       }
     })
 
-    const { error } = await supabase
-      .from('predictions')
-      .update(predictionsForDb)
+    
+    if (predictionsForDb.length) {
+      const { error } = await supabase
+        .from('predictions')
+        .update(predictionsForDb)
+        .in('id', predictionsForDb.map(x => x.id))
+    }
   }
 
   return {

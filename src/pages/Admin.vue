@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { ComponentWrapper, Loading } from '@/components'
 import { useAuthUser, usePrediction } from '@/composables'
 import { useStore } from '@/store'
@@ -11,6 +11,13 @@ const store = useStore()
 const loading = ref(false)
 const syncCompleted = ref(false)
 const lastSync = ref<string>("")
+
+onMounted(async () => {
+  await Promise.allSettled([
+    await store.fetchFixtures(store.selectedGameweekTitle),
+    await store.fetchPredictions()
+  ])
+})
 
 const sync = async () => {
   try {
