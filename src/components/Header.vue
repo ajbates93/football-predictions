@@ -27,7 +27,7 @@ onBeforeMount(() => window.addEventListener('scroll', handleScroll))
         <router-link font-bold text-xl hover:text-green-500 flex items-center to="/"><span inline-block text-white mr3 text-2xl i-iconoir-soccer-ball></span>Pred.io</router-link>
         <span v-if="isLoggedIn() && user" ml2>- Logged in as <b>{{ user.user_metadata.name }}</b></span>
       </div>
-      <div flex items-center>
+      <div flex items-center gap-x-1>
         <button v-if="!isLoggedIn()" @click="store.showLogIn = true" text-lg hover:text-green-500 ml3 text-white inline-block flex items-center>Log In <i ml-2 text-3xl inline-block i-carbon-login></i></button>
         <router-link v-if="isLoggedIn()" text-lg hover:text-green-500 mx3 to="/predictions">Fixtures & Predictions</router-link>
         <span v-if="isLoggedIn()">|</span>

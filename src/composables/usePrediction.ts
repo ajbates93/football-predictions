@@ -1,5 +1,5 @@
-import { useAuthUser, useSupabase } from '@/composables'
-import { ICreatePrediction, IFixture, IPrediction, IRawFixture } from "@/types"
+import { useAuthUser, usePoints, useSupabase } from '@/composables'
+import { ICompletePredictedFixture, ICreatePrediction, IFixture, IPrediction, IRawFixture } from "@/types"
 import { useExternalFixturesApi } from "@/api"
 
 const { user } = useAuthUser()
@@ -16,6 +16,7 @@ const parseIntFromRoundString = (x: string) => {
 
 export default function usePrediction() {
   const { supabase } = useSupabase()
+  const { evaluate } = usePoints()
 
   const fetchFixturesFromDB = async (round: string) => {
     const { data, error } = await supabase
@@ -157,13 +158,45 @@ export default function usePrediction() {
       throw error
   }
 
+  const updatePredictionsWithResults = async (predictions: IPrediction[], fixtures: ICompletePredictedFixture[]) => {
+    let predictionsForDb: IPrediction[] = []
+    const now = new Date()
+    predictions.map(x => {
+      const f = fixtures.find(y => y.fixtureId === x.fixtureId)
+      if (f && user.value) {
+        const points = evaluate(x, f)
+        const p: IPrediction = {
+          id: x.id,
+          userId: user.value.id,
+          fixtureId: x.fixtureId,
+          dateSubmitted: x.dateSubmitted,
+          dateModified: now,
+          homeGoals: x.homeGoals,
+          awayGoals: x.awayGoals,
+          homeWin: x.homeGoals > x.awayGoals,
+          awayWin: x.awayGoals > x.homeGoals,
+          xGprediction: 0,
+          gameComplete: x.gameComplete,
+          roundComplete: predictions.every(x => x.gameComplete),
+          pointsScored: points.correctScore ? 3 : points.correctResult ? 1 : 0
+        }
+        predictionsForDb.push(p)
+      }
+    })
+
+    const { error } = await supabase
+      .from('predictions')
+      .update(predictionsForDb)
+  }
+
   return {
     fetchFixturesFromDB,
     fetchPredictionsFromDB,
     addPrediction,
     addAllPredictions,
     syncFixturesFromApiToDb,
-    fetchLastSyncFromDB
+    fetchLastSyncFromDB,
+    updatePredictionsWithResults
   }
   
 }

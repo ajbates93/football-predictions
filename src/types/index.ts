@@ -128,3 +128,9 @@ export interface IProfile {
   teamName: string,
   points: number
 }
+
+export interface IPredictionResult {
+  correctScore: boolean,
+  correctResult: boolean,
+  noPoints: boolean
+}

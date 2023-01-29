@@ -2,26 +2,48 @@
 import { ref } from 'vue'
 import { ComponentWrapper, Loading } from '@/components'
 import { useAuthUser, usePrediction } from '@/composables'
+import { useStore } from '@/store'
 
 const { isAdmin } = useAuthUser()
-const { syncFixturesFromApiToDb, fetchLastSyncFromDB } = usePrediction()
+const { syncFixturesFromApiToDb, fetchLastSyncFromDB, updatePredictionsWithResults } = usePrediction()
+const store = useStore()
 
 const loading = ref(false)
 const syncCompleted = ref(false)
 const lastSync = ref<string>("")
 
 const sync = async () => {
-  loading.value = true
-  await syncFixturesFromApiToDb()
-  await fetchLastSync()
-  loading.value = false
+  try {
+    loading.value = true
+    await syncFixturesFromApiToDb()
+    await fetchLastSync()
+    syncCompleted.value = true
+  }
+  catch (ex: any) {
+    console.error(ex)
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+const awardPoints = async () => {
+  try {
+    loading.value = true
+    await updatePredictionsWithResults(store.predictions, store.orderedCompletedFixturesWithPredictions)
+  } 
+  catch (ex: any) {
+    console.error(ex)
+  }
+  finally {
+    loading.value = false
+  }
 }
 
 const fetchLastSync = async () => {
   const res = await fetchLastSyncFromDB()
   if (res) {
     lastSync.value = new Date(res.sync_date).toLocaleDateString('en-UK')
-    syncCompleted.value = true
   }
   else
     lastSync.value = "Could not retrieve sync data."
@@ -41,8 +63,14 @@ fetchLastSync()
         :class="loading ? 'bg-gray' : 'bg-green-600'"
         text-2xl text-white rounded px3 py1 mx-2 
         :disabled="loading">{{ loading ? 'Syncing...' : 'Sync Results' }}</button>
+      <button @click="awardPoints" v-if="isAdmin()"
+        :class="loading ? 'bg-gray' : 'bg-green-600'"
+        text-2xl text-white rounded px3 py1 mx-2 
+        :disabled="loading">{{ loading ? 'Awarding Points...' : 'Award Points' }}</button>
       <Loading v-if="loading" />
-      <div v-if="syncCompleted" text-green-600>Sync Completed!</div>
+      <div v-if="syncCompleted">
+        <div inline-block mx-auto my5 p2 bg-gray-600 text-white rounded>Sync Completed!</div>
+      </div>
     </ComponentWrapper>
   </section>
 </template>
