@@ -13,8 +13,8 @@ export const useStore = defineStore('main', {
     userProfile: {} as IProfile,
     userLeagues: [] as ILeague[],
     gameweek: {
-      title: 'Regular Season - 21',
-      round: 21
+      title: 'Regular Season - 22',
+      round: 22
     },
     selectedGameweek: 21
   }),

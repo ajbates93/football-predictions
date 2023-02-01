@@ -47,6 +47,7 @@ const submit = () => {
         <Loading />
       </p>
       <template v-else>
+        <!-- TODO: Predictions did not appear after clicking 'Save'. -->
         <Fixture v-for="fixture in store.orderedCompletedFixturesWithPredictions"
           :fixture="fixture"
           :editPrediction="editPredictions" 
